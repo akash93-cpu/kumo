@@ -23,19 +23,6 @@ function App() {
 
   return (
     <main>
-      <header className="site-header">
-        <a className="brand" href="#top" aria-label="KUMO home" data-testid="link-home">
-          <img src={logo} alt="KUMO — Know your numbers. Grow your hustle." />
-        </a>
-        <nav className={`desktop-nav ${menuOpen ? 'is-open' : ''}`} aria-label="Main navigation">
-          {navItems.map((item) => <a key={item.href} href={item.href} onClick={closeMenu}>{item.label}</a>)}
-          <a className="nav-login" href="#start" onClick={closeMenu}>Register or Log in <MoveUpRight size={14} /></a>
-          <a className="button button-gold nav-cta" href="#start" onClick={closeMenu}>Get early access <ArrowRight size={15} /></a>
-        </nav>
-        <button className="mobile-menu" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? 'Close menu' : 'Open menu'} data-testid="button-menu">
-          {menuOpen ? <X /> : <Menu />}
-        </button>
-      </header>
 
       <section className="hero banner" id="top">
         <div className="hero-grid">
@@ -58,10 +45,10 @@ function App() {
               <div className="dash-top"><div className="dash-brand"><span className="dash-mark">K</span><span>Overview</span></div><span className="period">Last 30 days <ChevronDown size={13} /></span></div>
               <div className="dash-welcome"><div><span className="micro-label">YOUR STORE, AT A GLANCE</span><h3>Looking good, Maya.</h3></div><span className="status-pill"><i /> Live</span></div>
               <div className="metric-row">
-                <div className="metric"><span>Net sales</span><strong>R24,680<span className="up">↑ 18.4%</span></strong><small>vs. previous 30 days</small></div>
+                <div className="metric"><span>Net sales</span><strong>R34,680<span className="up">↑ 18.4%</span></strong><small>vs. previous 30 days</small></div>
                 <div className="metric"><span>Profit margin</span><strong>32.8%<span className="up">↑ 4.2%</span></strong><small>after all your costs</small></div>
               </div>
-              <div className="chart-heading"><span>Sales over time</span><strong>$24,680 <small>+18.4%</small></strong></div>
+              <div className="chart-heading"><span>Sales over time</span><strong>R23,680 <small>+18.4%</small></strong></div>
               <div className="chart">
                 <div className="chart-y"><span>R8k</span><span>R6k</span><span>R4k</span><span>R2k</span></div>
                 <svg viewBox="0 0 540 154" role="img" aria-label="Sales trending upward across the month" preserveAspectRatio="none">
@@ -92,22 +79,22 @@ function App() {
           <div className="signal-board">
             <div className="signal-main">
               <div className="signal-heading"><span>THE REAL SCORE</span><span className="signal-date">MAY 01 — MAY 30</span></div>
-              <div className="signal-number">$8,094 <span>net profit</span></div>
+              <div className="signal-number">R8,094 <span>net profit</span></div>
               <div className="waterfall">
-                <div className="waterfall-bar sales"><span style={{height:'100%'}} /><label>Sales<strong>$24,680</strong></label></div>
+                <div className="waterfall-bar sales"><span style={{height:'100%'}} /><label>Sales<strong>R24,680</strong></label></div>
                 <div className="waterfall-minus">−</div>
-                <div className="waterfall-bar"><span style={{height:'59%'}} /><label>Costs<strong>$10,140</strong></label></div>
+                <div className="waterfall-bar"><span style={{height:'59%'}} /><label>Costs<strong>R10,140</strong></label></div>
                 <div className="waterfall-minus">−</div>
-                <div className="waterfall-bar"><span style={{height:'34%'}} /><label>Fees<strong>$2,446</strong></label></div>
+                <div className="waterfall-bar"><span style={{height:'34%'}} /><label>Fees<strong>R2,446</strong></label></div>
                 <div className="waterfall-eq">=</div>
-                <div className="waterfall-bar profit"><span style={{height:'45%'}} /><label>Profit<strong>$8,094</strong></label></div>
+                <div className="waterfall-bar profit"><span style={{height:'45%'}} /><label>Profit<strong>R8,094</strong></label></div>
               </div>
               <div className="signal-foot"><span><i className="tiny-gold" /> After products, shipping, and fees</span><span>Net margin <b>32.8%</b></span></div>
             </div>
             <div className="signal-side">
               <div className="side-top"><span className="side-kicker">ONE CLEAR SIGNAL</span><span className="insight-spark"><Sparkles size={16} /></span></div>
               <h3>One product is carrying your month.</h3>
-              <p>The Studio Tote brings in 38% of profit, while making up only 21% of orders.</p>
+              <p>The Studio Tote brings in 28% of profit, while making up only 21% of orders.</p>
               <div className="product-mini"><div className="tote-art"><span /></div><div><b>Studio Tote</b><small>Top profit driver</small></div><strong>38%</strong></div>
               <a href="#how-it-works" className="side-link">See the signal <ArrowRight size={15} /></a>
             </div>
@@ -181,12 +168,6 @@ function App() {
           <div className="finale-bottom"><span>GOOD THINGS GROW WITH GOOD NUMBERS.</span><a href="#top">BACK TO TOP ↑</a></div>
         </div>
       </section>
-      <footer className="footer">
-        <a className="footer-brand" href="#top"><img src={logo} alt="KUMO" /></a>
-        <span className="footer-tagline">KNOW YOUR NUMBERS. GROW YOUR HUSTLE.</span>
-        <div className="footer-links"><a href="#platform">Platform</a><a href="#how-it-works">How it works</a><a href="mailto:hello@kumo.com">Get in touch</a><a href="#start"><CircleHelp size={14} /> Help</a></div>
-        <span className="copyright">© 2025 KUMO COMMERCE</span>
-      </footer>
     </main>
   );
 }

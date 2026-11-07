@@ -1,6 +1,8 @@
 import { Routes, Route } from 'react-router-dom'
 import App from "./App.jsx";
+import RegisterPage from './pages/Register.jsx';
 import NavigationBar from './pages/Navbar.jsx';
+import Footer from './pages/Footer.jsx';
 
 export default function IndexPage() {
 
@@ -9,10 +11,12 @@ export default function IndexPage() {
     
     return (
         <>
-            {/* <NavigationBar /> */}
+            <NavigationBar />
             <Routes>
                 <Route path="/" element={<App />} /> 
+                <Route path="/register" element={<RegisterPage />}/>
             </Routes>
+            <Footer />
         </>
     );
 }
