@@ -20,7 +20,7 @@ public class MerchantEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "merchant_id")
-	private int merchantId;
+	private Integer merchantId;
 	
 	@Column(name = "email", nullable = false, unique = true)
 	private String email;
