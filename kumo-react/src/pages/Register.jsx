@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { ArrowLeft, ArrowRight, BriefcaseBusiness, Check, CircleUserRound, Eye, EyeOff, ShieldCheck, } from 'lucide-react'; 
-import logo from '../assets/kumo-logo.png';
+import { ArrowLeft, ArrowRight, BriefcaseBusiness, Check, CircleUserRound, Eye, EyeOff, ShieldCheck, } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/register-style.css';
 
 const emptyCredentials = {
   username: '',
   email: '',
+  phone: '',
   password: '',
   repeatPassword: '',
 };
@@ -13,18 +14,24 @@ const emptyCredentials = {
 const fieldLabels = {
   username: 'Username',
   email: 'Email address',
+  phone: 'Phone number',
   password: 'Password',
   repeatPassword: 'Repeat password',
 };
 
-function validate(values) {
+function validate(values, isMerchant) {
   const errors = {};
 
   Object.keys(fieldLabels).forEach((field) => {
+    if (field === 'phone' && !isMerchant) return;
     if (!values[field].trim()) {
       errors[field] = `${fieldLabels[field]} is required.`;
     }
   });
+
+  if (values.username.trim() && !/^[a-zA-Z0-9]+$/.test(values.username.trim())) {
+    errors.username = 'Username cannot contain special characters or spaces.';
+  }
 
   if (
     values.email.trim() &&
@@ -33,11 +40,97 @@ function validate(values) {
     errors.email = 'Enter a valid email address.';
   }
 
-  if ( values.password && values.repeatPassword && values.password !== values.repeatPassword ) { errors.repeatPassword = 'Passwords do not match.'; }
+  if (isMerchant && values.phone.trim() && !/^[0-9]{10}$/.test(values.phone.trim())) {
+    errors.phone = 'Phone number must be exactly 10 digits.';
+  }
+
+  if (
+    values.password &&
+    (values.password.length < 8 ||
+      values.password.length > 16 ||
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/.test(values.password))
+  ) {
+    errors.password =
+      'Use 8–16 characters with upper and lower case letters, a number and one of @$!%*?&.';
+  }
+
+  if (values.password && values.repeatPassword && values.password !== values.repeatPassword) {
+    errors.repeatPassword = 'Passwords do not match.';
+  }
+
   return errors;
 }
-
 function RegisterForm({ role }) {
+
+  const nav = useNavigate();
+  const [submitting, setSubmitting] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  const handleSubmitMerchant = async () => {
+    setSubmitting(true);
+    setNotice('');
+    setIsError(false);
+
+    try {
+      const response = await fetch('http://localhost:8080/create-merchant', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userName: values.username.trim(), // match your backend's field name
+          email: values.email.trim(),
+          phone: values.phone.trim(),
+          password: values.password,        // repeatPassword is not sent
+        }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (response.ok) {
+        setValues({ ...emptyCredentials });
+        setNotice('Merchant registered successfully!');
+        nav('/');
+      } else {
+        setIsError(true);
+        const fieldMessages =
+          data && typeof data === 'object'
+            ? Object.values(data).filter((v) => typeof v === 'string').join(' ')
+            : '';
+        setNotice(data.error || data.message || fieldMessages || 'Registration failed!');
+      }
+    } catch (error) {
+      console.error(error);
+      setIsError(true);
+      setNotice('Error connecting to server.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const submit = async (event) => {
+    event.preventDefault();
+
+    const nextErrors = validate(values, isMerchant);
+    setErrors(nextErrors);
+    setNotice('');
+
+    if (Object.keys(nextErrors).length) {
+      const firstInvalid = Object.keys(nextErrors)[0];
+      document.getElementById(`${roleId}-${firstInvalid}`)?.focus();
+      return;
+    }
+
+    if (isMerchant) {
+      await handleSubmitMerchant();
+      return;
+    }
+
+    // Customer registration is still not connected
+    setValues({ ...emptyCredentials });
+    setNotice('Registration isn’t connected yet. Your details have not been saved.');
+  };
+
+
+
   const [values, setValues] = useState(emptyCredentials);
   const [errors, setErrors] = useState({});
   const [notice, setNotice] = useState('');
@@ -89,28 +182,6 @@ function RegisterForm({ role }) {
     });
   };
 
-  const submit = (event) => {
-    event.preventDefault();
-
-    const nextErrors = validate(values);
-    setErrors(nextErrors);
-    setNotice('');
-
-    if (Object.keys(nextErrors).length) {
-      const firstInvalid = Object.keys(nextErrors)[0];
-
-      document.getElementById(`${roleId}-${firstInvalid}`)?.focus();
-      return;
-    }
-
-    // Registration is not connected to a backend.
-    // Credentials are not sent or stored.
-    setValues({ ...emptyCredentials });
-    setNotice(
-      'Registration isn’t connected yet. Your details have not been saved.'
-    );
-  };
-
   const renderField = (field) => {
     const isPassword =
       field === 'password' || field === 'repeatPassword';
@@ -119,16 +190,14 @@ function RegisterForm({ role }) {
       field === 'password' ? showPassword : showRepeat;
 
     const type = isPassword
-      ? shown
-        ? 'text'
-        : 'password'
+      ? shown ? 'text' : 'password'
       : field === 'email'
         ? 'email'
-        : 'text';
-
-    const testId = `input-${roleId}-${
-      field === 'repeatPassword' ? 'repeat-password' : field
-    }`;
+        : field === 'phone'
+          ? 'tel'
+          : 'text';
+    const testId = `input-${roleId}-${field === 'repeatPassword' ? 'repeat-password' : field
+      }`;
 
     const label = fieldLabels[field];
 
@@ -140,9 +209,8 @@ function RegisterForm({ role }) {
         </label>
 
         <div
-          className={`register-input-wrap ${
-            errors[field] ? 'has-error' : ''
-          }`}
+          className={`register-input-wrap ${errors[field] ? 'has-error' : ''
+            }`}
         >
           <input
             id={`${roleId}-${field}`}
@@ -155,9 +223,10 @@ function RegisterForm({ role }) {
                 ? 'username'
                 : field === 'email'
                   ? 'email'
-                  : 'new-password'
-            }
-            required
+                  : field === 'phone'
+                    ? 'tel'
+                    : 'new-password'
+            } required
             aria-invalid={Boolean(errors[field])}
             aria-describedby={
               errors[field] ? `${roleId}-${field}-error` : undefined
@@ -174,13 +243,11 @@ function RegisterForm({ role }) {
                   ? setShowPassword(!shown)
                   : setShowRepeat(!shown)
               }
-              aria-label={`${
-                shown ? 'Hide' : 'Show'
-              } ${
-                field === 'password'
+              aria-label={`${shown ? 'Hide' : 'Show'
+                } ${field === 'password'
                   ? 'password'
                   : 'repeated password'
-              }`}
+                }`}
               data-testid={`button-${roleId}-toggle-${field}`}
             >
               {shown ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -204,9 +271,8 @@ function RegisterForm({ role }) {
 
   return (
     <section
-      className={`register-card ${
-        isMerchant ? 'merchant-card' : 'customer-card'
-      }`}
+      className={`register-card ${isMerchant ? 'merchant-card' : 'customer-card'
+        }`}
       aria-labelledby={`${roleId}-heading`}
     >
       <div className="register-card-head">
@@ -244,29 +310,29 @@ function RegisterForm({ role }) {
       >
         {renderField('username')}
         {renderField('email')}
+        {isMerchant && renderField('phone')}
         {renderField('password')}
         {renderField('repeatPassword')}
 
         <button
-          className={`register-submit ${
-            isMerchant ? 'submit-gold' : 'submit-ink'
-          }`}
+          className={`register-submit ${isMerchant ? 'submit-gold' : 'submit-ink'}`}
           type="submit"
+          disabled={submitting}
           data-testid={`button-register-${roleId}`}
         >
-          Register as a {roleName}
+          {submitting ? 'Registering…' : `Register as a ${roleName}`}
           <ArrowRight size={16} />
         </button>
 
         <div
-          className="registration-notice"
+          className={`registration-notice ${isError ? 'notice-error' : ''}`}
           role="status"
           aria-live="polite"
           data-testid={`status-register-${roleId}`}
         >
           {notice && (
             <>
-              <Check size={16} />
+              {!isError && <Check size={16} />}
               <span>{notice}</span>
             </>
           )}

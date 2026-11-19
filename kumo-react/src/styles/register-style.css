@@ -5,6 +5,7 @@
   position: relative;
   overflow: hidden;
 }
+.notice-error { color: #b42318; }
 .register-page::before {
   position: absolute;
   content: "";

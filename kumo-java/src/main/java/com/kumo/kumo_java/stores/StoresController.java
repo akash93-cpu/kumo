@@ -3,14 +3,16 @@ package com.kumo.kumo_java.stores;
 import java.security.NoSuchAlgorithmException;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
@@ -23,14 +25,18 @@ public class StoresController {
 	
 	@PostMapping("/create-store")
 	@ResponseStatus(HttpStatus.CREATED)
-	public StoreDto createStore(@Valid @RequestBody StoreDto storeDto) throws NoSuchAlgorithmException {
-		return service.createStore(storeDto);
+	@CrossOrigin(origins="http://localhost:5173")
+	@PreAuthorize("isAuthenticated()")
+	public StoreDto createStore(@Valid @RequestBody StoreDto storeDto, HttpServletRequest req) throws NoSuchAlgorithmException {
+		return service.createStore(storeDto, req);
 	}
 	
 	@DeleteMapping("/delete-store/{id}")
+	@PreAuthorize("isAuthenticated()")
+	@CrossOrigin(origins="http://localhost:5173")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteByStoreId(@PathVariable("id") Integer id) {
-		service.removeStoreById(id);
+	public void deleteByStoreId(HttpServletRequest req) {
+		service.removeStoreById(req);
 	}
 	
 }

@@ -33,6 +33,11 @@ public class MerchantUserPrinciple implements UserDetails {
     public String getUserString() {
     	return merchantEntity.getUserName();
     }
+    
+    // To get merchant id
+    public Integer getMerchantId() {
+		return merchantEntity.getMerchantId();
+	}
 
     @Override
     public boolean isAccountNonExpired() {

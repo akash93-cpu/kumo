@@ -51,7 +51,11 @@ public class JwtUtil {
     public String extractActualUsername(String token) {
         return extractClaim(token, claims -> claims.get("username", String.class));
     }
-
+    
+    public Integer extractMerchantId(String token) {
+    	return extractClaim(token, claims -> claims.get("merchant_id", Integer.class));
+	}
+    
     private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
@@ -61,6 +65,7 @@ public class JwtUtil {
         
         if (userDetails instanceof MerchantUserPrinciple userPrinciple) {
         	claims.put("username", userPrinciple.getUserString());
+        	claims.put("merchant_id", userPrinciple.getMerchantId());
         }
         
         return createToken(claims, userDetails.getUsername());

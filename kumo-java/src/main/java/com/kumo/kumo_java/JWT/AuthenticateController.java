@@ -3,6 +3,7 @@ package com.kumo.kumo_java.JWT;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +26,7 @@ public class AuthenticateController {
 	private final ApplicationUserDetailsServiceM merchantM;
 	
 	@PostMapping("/login")
+	@CrossOrigin(origins="http://localhost:5173")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void authenticate(@RequestBody AuthRequest req, HttpServletResponse response) throws Exception {
 		
@@ -57,6 +59,7 @@ public class AuthenticateController {
 	}
 	
 	@GetMapping("/get-email")
+	@CrossOrigin(origins="http://localhost:5173")
 	public String getUserEmail(HttpServletRequest req) {
 		String jwtString = null;
 		if (req.getCookies() != null) {
@@ -72,7 +75,8 @@ public class AuthenticateController {
 		return emailString;
 	}
 	
-	@GetMapping("/user-token")
+	@GetMapping("/user-name")
+	@CrossOrigin(origins="http://localhost:5173")
 	public String getUsernameToken(HttpServletRequest request) {
 		
 	    String jwt = null;
@@ -94,8 +98,29 @@ public class AuthenticateController {
 	    
 	}	
 	
-	@PostMapping("/logout")
-	@CrossOrigin(origins="http://13.60.77.226:5173")
+	@GetMapping("/merchant-id")
+	@CrossOrigin(origins="http://localhost:5173")
+	public int getMerchantId(HttpServletRequest req) {
+	    String jwt = null;
+	    if (req.getCookies() != null) {
+	        for (Cookie cookie : req.getCookies()) {
+	            if ("jwt".equals(cookie.getName())) {
+	                jwt = cookie.getValue();
+	                break;
+	            }
+	        }
+	    }
+
+	    if (jwt == null) {
+	        System.out.println("JWT cookie not found");
+	    }
+	    Integer merchantIdInteger = jwtUtil.extractMerchantId(jwt);
+	    return merchantIdInteger;
+
+	}
+	
+	@DeleteMapping("/logout")
+	@CrossOrigin(origins="http://localhost:5173")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void logout(HttpServletResponse res) {
 		
