@@ -129,8 +129,6 @@ function RegisterForm({ role }) {
     setNotice('Registration isn’t connected yet. Your details have not been saved.');
   };
 
-
-
   const [values, setValues] = useState(emptyCredentials);
   const [errors, setErrors] = useState({});
   const [notice, setNotice] = useState('');

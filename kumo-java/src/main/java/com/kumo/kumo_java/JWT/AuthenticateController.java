@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.kumo.kumo_java.merchant.MerchantEntity;
 
@@ -35,13 +36,15 @@ public class AuthenticateController {
 		try {
 			user = merchantM.authenticateMerchant(req.getEmail(), req.getPassword());
 		} catch (BadCredentialsException e) {
-			throw new Exception("Incorrect Username or Password!", e);
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+					"Incorrect Username or Password!", e);
 		}
 		
 		try {
 			user = merchantM.checkAccountState(req.getEmail());
 		} catch (BadCredentialsException e) {
-			throw new Exception("Account not yet active! Please verify your account!", e);
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+					"Account not yet active! Please verify your account!", e);
 		}
 		
 		var userDetails = merchantM.loadUserByUsername(user.getEmail());

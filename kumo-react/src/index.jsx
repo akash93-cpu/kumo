@@ -3,6 +3,7 @@ import App from "./App.jsx";
 import RegisterPage from './pages/Register.jsx';
 import NavigationBar from './pages/Navbar.jsx';
 import Footer from './pages/Footer.jsx';
+import AboutPage from './pages/About.jsx';
 
 export default function IndexPage() {
 
@@ -15,6 +16,7 @@ export default function IndexPage() {
             <Routes>
                 <Route path="/" element={<App />} /> 
                 <Route path="/register" element={<RegisterPage />}/>
+                <Route  path='/about' element={<AboutPage />}/>
             </Routes>
             <Footer />
         </>

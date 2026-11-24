@@ -119,4 +119,89 @@ a { color: inherit; text-decoration: none; }
 .nav-login:hover { color: var(--gold-light); }
 .user-menu-dropdown { position: absolute; top: calc(100% + 14px); right: 0; width: 160px; padding: 7px; border: 1px solid rgba(255, 255, 255, 0.1); background: #202120; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35); }
 .user-menu-dropdown a { display: block; padding: 10px 12px; color: #d8d6ce; font-size: 12px; font-weight: 500; }
+.user-menu-dropdown .user-menu-item {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  margin: 0;
+  color: #d8d6ce;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.user-menu-dropdown .user-menu-item:hover {
+  color: var(--ink);
+  background: var(--gold);
+}
+
+.user-menu-dropdown .user-menu-item:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: -2px;
+}
 .user-menu-dropdown a:hover { color: var(--ink); background: var(--gold); }
+
+/* Logged-in greeting */
+.user-greeting {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.user-menu.is-open .user-chevron { transform: rotate(180deg); }
+.user-chevron { transition: transform .2s; }
+
+/* Wider dropdown so "Add or remove products" fits */
+.user-menu-dropdown { width: 210px; }
+
+/* Logout separated from the other items */
+.user-menu-dropdown .user-menu-logout {
+  margin-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+@media (min-width: 900px) {
+    .user-submenu {
+        position: relative;
+    }
+
+    .user-submenu-list {
+        position: absolute;
+        top: 0;
+        left: 100%;
+        min-width: 160px;
+        padding: 6px 0;
+        margin: 0 0 0 4px;
+        border-left: none;
+        background: #fff; /* match your dropdown background */
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+}
+/* Mobile: dropdown flows inline inside the stacked menu instead of floating */
+@media (max-width: 760px) {
+  .user-menu-dropdown {
+    position: static;
+    width: 100%;
+    margin-top: 8px;
+    box-shadow: none;
+  }
+  .desktop-nav .nav-login { padding: 13px 0; }
+}
+
+.user-submenu-list {
+  display: flex;
+  flex-direction: column;
+  position: static;
+  margin: 2px 0 4px 12px;
+  background: transparent;
+  box-shadow: none;
+  border-left: 1px solid var(--gold);
+}

@@ -35,7 +35,7 @@ public class ProductController {
 		return prodServ.createProduct(productsDto);
 	}
 	
-	@GetMapping("/return-all-products/{storeId}")
+	@GetMapping("/get-all-products/{storeId}")
 	@PreAuthorize("isAuthenticated()")
 	@CrossOrigin(origins="http://localhost:5173")
 	@ResponseStatus(HttpStatus.OK)

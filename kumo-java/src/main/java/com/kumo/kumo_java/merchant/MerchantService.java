@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.kumo.kumo_java.customer.CustomerRepo;
 import com.kumo.kumo_java.exceptions.BadRequestException;
+import com.kumo.kumo_java.exceptions.NotFoundException;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.experimental.var;
 
@@ -29,7 +31,21 @@ public class MerchantService {
 	}
 	
 	public MerchantEntity findAnyByEmail(String email) {
-		return repositoryM.findUserByEmail(email);
+		return repositoryM.findByEmail(email)
+				.orElse(null);
+	}
+	
+	private MerchantEntity findOrThrow(final String email) {
+		
+		return repositoryM.findByEmail(email)
+				.orElseThrow(() -> new NotFoundException("Merchant not found!"));
+				
+	}
+	
+	@Transactional
+	public void removeMerchantByEmail(String email) {
+		findOrThrow(email);
+		repositoryM.deleteByEmail(email);
 	}
 	
 	public MerchantDTO createMerchant(MerchantDTO merchantDto, String password) throws NoSuchAlgorithmException {

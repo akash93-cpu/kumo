@@ -4,6 +4,7 @@ import java.security.NoSuchAlgorithmException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +25,12 @@ public class MerchantController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public MerchantDTO createMerchant(@Valid @RequestBody MerchantDTO merchantDTO) throws NoSuchAlgorithmException {		
 		return service.createMerchant(merchantDTO, merchantDTO.getPassword());
+	}
+	
+	@DeleteMapping("/delete-merchant/{email}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteMerchant(@PathVariable("email") String email) {
+		service.removeMerchantByEmail(email);
 	}
 		
 }

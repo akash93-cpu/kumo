@@ -1,5 +1,7 @@
 package com.kumo.kumo_java.stores;
 
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +50,18 @@ public class StoresService {
 	     
 	    return jwtUtil.extractMerchantId(jwt); 
 
+	}
+	
+	public List<StoresEntity> listMyStore(HttpServletRequest req) {
+
+	    int merchantId = extractMerchantId(req);
+
+	    merchantRepo.findById(merchantId)
+	            .orElseThrow(() -> new RuntimeException("Merchant not found!"));
+
+	    return storesRepo.findByMerchant_MerchantId(merchantId)
+	    		.map(List::of)
+	    		.orElseGet(List::of);
 	}
 	
 	public StoreDto createStore(StoreDto storeDto , HttpServletRequest req) {
