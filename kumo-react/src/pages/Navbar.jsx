@@ -2,6 +2,8 @@ import { ArrowRight, Menu, X, User, ChevronDown } from "lucide-react";
 import { useState, useRef, useEffect, useCallback } from "react";
 import logo from "../assets/kumo-logo.png";
 import LoginModal from "./LoginModal";
+import CreateStoreModal from "./CreateStoreModal";
+import ViewStoreModal from "./ViewStore";
 import "../styles/landing-page-style.css";
 
 export default function NavigationBar() {
@@ -10,7 +12,9 @@ export default function NavigationBar() {
     const [loginOpen, setLoginOpen] = useState(false);
     const [userName, setUserName] = useState(null); // null = not logged in
     const [storeOpen, setStoreOpen] = useState(false);
+    const [storeModalOpen, setStoreModalOpen] = useState(false);
     const userMenuRef = useRef(null);
+    const [viewStoreOpen, setViewStoreOpen] = useState(false);
 
     const navItems = [
         { href: "/about", label: "About" },
@@ -137,23 +141,32 @@ export default function NavigationBar() {
                                         {storeOpen && (
                                             <div className="user-submenu-list" role="menu">
                                                 <a
-                                                    href="/store/add"
+                                                    type="button"
                                                     role="menuitem"
-                                                    onClick={() => { closeUserMenu(); closeMenu(); }}
+                                                    onClick={() => {
+                                                        closeUserMenu();
+                                                        closeMenu();
+                                                        setStoreModalOpen(true);
+                                                    }}
                                                 >
                                                     Add Store
                                                 </a>
                                                 <a
-                                                    href="/store"
+                                                    type="button"
                                                     role="menuitem"
-                                                    onClick={() => { closeUserMenu(); closeMenu(); }}
+                                                    onClick={() => {
+                                                        closeUserMenu();
+                                                        closeMenu();
+                                                        setViewStoreOpen(true);
+                                                    }}
+
                                                 >
-                                                    View Store
+                                                    View Store/Products
                                                 </a>
                                             </div>
                                         )}
-                                    </div>                                    <a href="/products" role="menuitem" onClick={() => { setUserOpen(false); closeMenu(); }}>
-                                        Add or remove products
+                                    </div> <a href="/products" role="menuitem" onClick={() => { setUserOpen(false); closeMenu(); }}>
+                                        {"+"} Add products
                                     </a>
                                     <button
                                         type="button"
@@ -209,6 +222,17 @@ export default function NavigationBar() {
                     setLoginOpen(false);
                     fetchUserName(); // refresh the name right after login
                 }}
+            />
+            <CreateStoreModal
+                open={storeModalOpen}
+                onOpenChange={setStoreModalOpen}
+                onSuccess={(store) => {
+                    console.log("Store created", store);
+                }}
+            />
+            <ViewStoreModal
+                open={viewStoreOpen}
+                onOpenChange={setViewStoreOpen}
             />
         </header>
     );

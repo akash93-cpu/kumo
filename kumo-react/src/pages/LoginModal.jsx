@@ -5,7 +5,7 @@ import {
   Check,
   CircleUserRound,
   Eye,
-  EyeOff, LoaderCircle,  LockKeyhole
+  EyeOff, LoaderCircle, LockKeyhole
 } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { useEffect, useRef, useState } from 'react';
@@ -41,11 +41,11 @@ export default function LoginModal({ trigger, open, onOpenChange, onSuccess }) {
   const [loading, setLoading] = useState(false);
 
   const activeRequest = useRef(null);
-const closeTimer = useRef(null);
+  const closeTimer = useRef(null);
 
-useEffect(() => {
-  return () => clearTimeout(closeTimer.current);
-}, []);
+  useEffect(() => {
+    return () => clearTimeout(closeTimer.current);
+  }, []);
   const changeRole = (role) => {
     setAccountType(role);
     setStatus(null);
@@ -186,8 +186,7 @@ useEffect(() => {
     <>
       <span
         onClick={() => handleOpenChange(true)}
-        style={{ display: 'contents' }}
-      >
+        style={{ display: 'contents' }}>
         {trigger}
       </span>
 
@@ -197,16 +196,13 @@ useEffect(() => {
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) {
               handleOpenChange(false);
-            }
-          }}
-        >
+              }}}>
           <div
             className="login-dialog-content"
             role="dialog"
             aria-modal="true"
             aria-labelledby="login-title"
-            data-testid="dialog-login"
-          >
+            data-testid="dialog-login">
             <div className="login-dialog">
 
               <div className="login-dialog-kicker">
@@ -232,8 +228,7 @@ useEffect(() => {
               <div
                 className="login-role-options"
                 role="radiogroup"
-                aria-label="Choose account type"
-              >
+                aria-label="Choose account type">
                 <button
                   id="login-role-merchant"
                   type="button"
@@ -244,8 +239,7 @@ useEffect(() => {
                   onClick={() => changeRole('merchant')}
                   onKeyDown={handleRoleKeyDown}
                   disabled={loading}
-                  data-testid="button-login-role-merchant"
-                >
+                  data-testid="button-login-role-merchant">
                   <BriefcaseBusiness size={17} />
                   <span>Merchant</span>
                   <small>Your store, your numbers</small>
@@ -261,8 +255,7 @@ useEffect(() => {
                   onClick={() => changeRole('user')}
                   onKeyDown={handleRoleKeyDown}
                   disabled={loading}
-                  data-testid="button-login-role-user"
-                >
+                  data-testid="button-login-role-user">
                   <CircleUserRound size={17} />
                   <span>User</span>
                   <small>Your KUMO account</small>
@@ -274,8 +267,7 @@ useEffect(() => {
                 noValidate
                 onSubmit={submit}
                 aria-label="Sign in"
-                aria-busy={loading}
-              >
+                aria-busy={loading}>
                 <div className="login-field">
                   <label htmlFor="login-email">
                     Email address <span aria-hidden="true">*</span>
@@ -302,16 +294,14 @@ useEffect(() => {
                     aria-describedby={
                       errors.email ? 'login-email-error' : undefined
                     }
-                    data-testid="input-login-email"
-                  />
+                    data-testid="input-login-email"/>
 
                   {errors.email && (
                     <span
                       id="login-email-error"
                       className="login-field-error"
                       role="alert"
-                      data-testid="error-login-email"
-                    >
+                      data-testid="error-login-email">
                       {errors.email}
                     </span>
                   )}
@@ -344,19 +334,16 @@ useEffect(() => {
                       aria-describedby={
                         errors.password ? 'login-password-error' : undefined
                       }
-                      data-testid="input-login-password"
-                    />
+                      data-testid="input-login-password"/>
 
                     <button
                       type="button"
                       className="login-password-toggle"
                       aria-label={
-                        showPassword ? 'Hide password' : 'Show password'
-                      }
+                        showPassword ? 'Hide password' : 'Show password'}
                       disabled={loading}
                       onClick={() => setShowPassword((shown) => !shown)}
-                      data-testid="button-login-toggle-password"
-                    >
+                      data-testid="button-login-toggle-password">
                       {showPassword
                         ? <EyeOff size={16} />
                         : <Eye size={16} />}
@@ -368,8 +355,7 @@ useEffect(() => {
                       id="login-password-error"
                       className="login-field-error"
                       role="alert"
-                      data-testid="error-login-password"
-                    >
+                      data-testid="error-login-password">
                       {errors.password}
                     </span>
                   )}
@@ -379,8 +365,7 @@ useEffect(() => {
                   className="login-submit"
                   type="submit"
                   disabled={loading}
-                  data-testid="button-login-submit"
-                >
+                  data-testid="button-login-submit">
                   <span>
                     {loading ? 'Signing you in' : 'Sign in to KUMO'}
                   </span>
@@ -389,13 +374,11 @@ useEffect(() => {
                     ? <LoaderCircle size={16} className="login-loading-icon" aria-hidden="true" />
                     : <ArrowRight size={16} />}
                 </button>
-
                 <div
                   className={`login-status ${status ? `is-${status.tone}` : ''}`}
                   role="status"
                   aria-live="polite"
-                  data-testid="status-login"
-                >
+                  data-testid="status-login">
                   {status && (
                     <>
                       {status.tone === 'success'
@@ -407,12 +390,10 @@ useEffect(() => {
                   )}
                 </div>
               </form>
-
               <div className="login-dialog-foot">
                 <span>SECURE ACCOUNT ACCESS</span>
                 <span>KNOW YOUR NUMBERS.</span>
               </div>
-
             </div>
           </div>
         </div>,

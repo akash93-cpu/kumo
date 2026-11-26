@@ -4,6 +4,7 @@ import RegisterPage from './pages/Register.jsx';
 import NavigationBar from './pages/Navbar.jsx';
 import Footer from './pages/Footer.jsx';
 import AboutPage from './pages/About.jsx';
+import ViewProducts from './pages/ViewProducts.jsx';
 
 export default function IndexPage() {
 
@@ -16,7 +17,8 @@ export default function IndexPage() {
             <Routes>
                 <Route path="/" element={<App />} /> 
                 <Route path="/register" element={<RegisterPage />}/>
-                <Route  path='/about' element={<AboutPage />}/>
+                <Route path='/about' element={<AboutPage />}/>
+                <Route path='/view-products' element={<ViewProducts />}/>
             </Routes>
             <Footer />
         </>

@@ -3,14 +3,7 @@ import { ArrowDown, ArrowRight, BarChart3, Check, ChevronDown, CircleHelp, Menu,
 import logo from '../src/assets/kumo-logo.png';
 import '../src/styles/landing-page-style.css';
 
-const navItems = [
-  { label: 'Platform', href: '#platform' },
-  { label: 'How it works', href: '#how-it-works' },
-  { label: 'For sellers', href: '#for-sellers' },
-];
-
 function App() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
@@ -18,8 +11,6 @@ function App() {
   //   event.preventDefault();
   //   if (email.trim()) setSubmitted(true);
   // };
-
-  const closeMenu = () => setMenuOpen(false);
 
   return (
     <main>
