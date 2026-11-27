@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight, PackageOpen } from 'lucide-react';
 import '../styles/view-products-style.css';
 
 // ---- Config -------------------------------------------------------------
-const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:8080';
+const API_BASE = 'http://localhost:8080';
 const PAGE_SIZE_OPTIONS = [10, 20, 30]; // 30 is the maximum
 const DEFAULT_PAGE_SIZE = 10;
  

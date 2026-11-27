@@ -3,6 +3,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import logo from "../assets/kumo-logo.png";
 import LoginModal from "./LoginModal";
 import CreateStoreModal from "./CreateStoreModal";
+import AddProductModal from "./AddProductModal";
 import ViewStoreModal from "./ViewStore";
 import "../styles/landing-page-style.css";
 
@@ -15,6 +16,7 @@ export default function NavigationBar() {
     const [storeModalOpen, setStoreModalOpen] = useState(false);
     const userMenuRef = useRef(null);
     const [viewStoreOpen, setViewStoreOpen] = useState(false);
+    const [showAdd, setShowAdd] = useState(false);
 
     const navItems = [
         { href: "/about", label: "About" },
@@ -165,7 +167,13 @@ export default function NavigationBar() {
                                                 </a>
                                             </div>
                                         )}
-                                    </div> <a href="/products" role="menuitem" onClick={() => { setUserOpen(false); closeMenu(); }}>
+                                    </div>
+                                    <a type="button" role="menuitem" onClick={() => {
+                                        closeUserMenu();
+                                        closeMenu();
+                                        setShowAdd(true);
+                                    }}
+                                    >
                                         {"+"} Add products
                                     </a>
                                     <button
@@ -234,6 +242,9 @@ export default function NavigationBar() {
                 open={viewStoreOpen}
                 onOpenChange={setViewStoreOpen}
             />
-        </header>
+            <AddProductModal
+                open={showAdd}
+                onOpenChange={setShowAdd}
+            />        </header>
     );
 }
